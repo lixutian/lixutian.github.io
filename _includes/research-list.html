@@ -1,0 +1,12 @@
+{% assign research_papers = site.publications | sort: 'resume_order' %}
+{% for paper in research_papers %}
+<h3><a href="{{ paper.url | relative_url }}">{{ paper.title | escape }}</a></h3>
+{% include publication-meta.html publication=paper %}
+{% if include.detailed %}
+<p><strong>Research period:</strong> {{ paper.research_period | escape }}</p>
+{{ paper.content | markdownify }}
+{% else %}
+{{ paper.excerpt | markdownify }}
+<p><a href="{{ paper.paperurl }}">{{ paper.paper_label | escape }}</a></p>
+{% endif %}
+{% endfor %}

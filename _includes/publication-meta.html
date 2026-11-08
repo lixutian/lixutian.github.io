@@ -1,0 +1,5 @@
+{% assign publication = include.publication %}
+{% if publication.authors %}
+<p>{{ publication.authors | markdownify | remove: '<p>' | remove: '</p>' }}</p>
+{% endif %}
+<p><strong>{{ publication.author_role | escape }}</strong> &middot; {{ publication.publication_status | escape }} &middot; <i>{{ publication.venue | escape }}</i></p>

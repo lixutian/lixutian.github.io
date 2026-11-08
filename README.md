@@ -1,3 +1,31 @@
+# Xutian Li — Academic Homepage
+
+This site uses Academic Pages and is deployed through the existing GitHub Pages repository.
+
+## Profile content
+
+- `_config.yml`: sidebar identity, affiliation, public email, GitHub account, and site metadata.
+- `_pages/about.md` and `_pages/cv.md`: introduction, education, awards, research interests, course project, and skills.
+- `_publications/`: paper titles, authors, links, authorship roles, publication status, research periods, and results. `resume_order` controls the order on the homepage and CV.
+- `_includes/research-list.html` and `_includes/publication-meta.html`: shared rendering so the homepage, CV, publication index, and paper details use consistent paper metadata.
+
+Publication status is distinct from the research period. FeatLens is an **under-review preprint**, not an accepted FSE paper. Quantitative results follow the resume; the FeatLens results are identified as submission experiments. The course project's perplexity increase is retained alongside its reduction in repetition.
+
+Keep the private resume PDF, phone number, date of birth, and resume portrait out of the public site. The existing public email and homepage avatar are preserved.
+
+## Validation
+
+After installing the Ruby dependencies described below:
+
+```sh
+bundle exec jekyll build --safe
+python -m unittest discover -s tests -v
+```
+
+The tests check the generated profile pages, publication status and links, reported results, local navigation/assets, and privacy boundaries. Local dependencies, build configuration, test files, and build output are excluded from publication.
+
+---
+
 # Academic Pages
 **Academic Pages is a Github Pages template for academic websites.**
 

@@ -7,57 +7,51 @@ redirect_from:
   - /resume
 ---
 
-{% include base_path %}
+## Research Interests
 
-Education
-======
+Code intelligence, repository-level code evolution, code retrieval, static program analysis, graph algorithms, and LLM agents.
 
-[//]: # (* Ph.D in Version Control Theory, GitHub University, 2018 &#40;expected&#41;)
-* B.S. in Computer Science and Technology, Beijing Institute of Technology, 2021 - 2025 (expected)
+**Research internship interests:** code intelligence / LLM agents.
 
-Work experience
-======
-None now
+**Contact:** [{{ site.author.email }}](mailto:{{ site.author.email }}).
 
-[//]: # (* Spring 2024: Academic Pages Collaborator)
+## Education
 
-[//]: # (  * Github University)
+### Peking University — School of Computer Science
 
-[//]: # (  * Duties includes: Updates and improvements to template)
+**Direct-entry Ph.D. in Computer Science and Technology** · September 2025–June 2030 (expected)
 
-[//]: # (  * Supervisor: The Users)
-  
-Skills
-======
-* basic C/C++
-* Java
-  * basic Java
-  * Spring Boot
-  * JavaFx
-* Python
-* JavaScript
+- Research area: software engineering.
 
-<!--
-Publications
-======
-  <ul>{% for post in site.publications reversed %}
-    {% include archive-single-cv.html %}
-  {% endfor %}</ul>
+### Beijing Institute of Technology — School of Computer Science
 
-Talks
-======
-  <ul>{% for post in site.talks reversed %}
-    {% include archive-single-talk-cv.html  %}
-  {% endfor %}</ul>
+**Bachelor's degree in Computer Science and Technology** · September 2021–June 2025
 
-Teaching
-======
-  <ul>{% for post in site.teaching reversed %}
-    {% include archive-single-cv.html %}
-  {% endfor %}</ul>
+- Average credit-weighted score over the first three undergraduate years: **92.7/100**.
+- Rank over the first three undergraduate years: **1/162** in the major.
 
--->
+## Honors and Awards
 
-Service and leadership
-======
-None now
+- **National Scholarship**, twice.
+- **Beijing Outstanding Student** (北京市三好学生).
+- **Beijing Outstanding Graduate** (北京市优秀毕业生).
+
+## Research Experience and Publications
+
+{% include research-list.html detailed=true %}
+
+## Course Project
+
+### Repetitive Generation Analysis and Neuron Intervention in Language Models
+
+**Computational linguistics course project** · September 2025–January 2026
+
+**Code:** [github.com/uniqueFranky/LLMRep](https://github.com/uniqueFranky/LLMRep)
+
+- Reproduced a method for identifying repetition-related neurons. Used PyTorch forward hooks to collect MLP activations, selected candidate neurons by differences in mean activation before and after repetition, and zeroed their activations during inference.
+- In the course report's **GPT-2 / IWSLT** experiment, neuron suppression alone reduced **Rep-3 from 70.66% to 24.54%**, while **perplexity increased from 1.589 to 3.732**. These results show a repetition–perplexity trade-off, not a lossless improvement.
+
+## Technical Skills
+
+- **Programming:** Java, Python, JavaScript, C++.
+- **Research and development:** static program analysis, code retrieval, graph algorithms, and LLM agent tooling.
