@@ -1,0 +1,14 @@
+{% assign recent_papers = site.publications | sort: 'date' | reverse %}
+<ul class="homepage-news">
+  {% for paper in recent_papers %}
+    {% unless paper.category == 'preprints' %}
+    <li>
+      <time datetime="{{ paper.date | date: '%Y-%m-%d' }}">{{ paper.date | date: '%Y.%m' }}</time>:
+      Our paper <a href="{{ paper.paperurl }}">{{ paper.short_title | escape }}</a>
+      {% if paper.category == 'manuscripts' %}was published online{% else %}was published{% endif %}
+      in <strong>{{ paper.venue_label | escape }}</strong>{% if paper.homepage_note %} ({{ paper.homepage_note | escape }}){% endif %}.
+    </li>
+    {% endunless %}
+  {% endfor %}
+  <li><time datetime="2025-09">2025.09</time>: I joined <strong>Peking University</strong> as a direct-entry Ph.D. student in Computer Science and Technology.</li>
+</ul>

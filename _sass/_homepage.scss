@@ -1,0 +1,80 @@
+/* Homepage-only academic list layout. Keep the site's fonts and avatar untouched. */
+.page--homepage {
+  .page__content {
+    > p {
+      margin-bottom: 0.8em;
+    }
+
+    h2 {
+      margin-top: 1.65em;
+      margin-bottom: 0.5em;
+      padding-bottom: 0.35em;
+      scroll-margin-top: calc(#{$masthead-height} + 1rem);
+    }
+
+    a {
+      color: #278462;
+      text-decoration: underline;
+      text-underline-offset: 0.12em;
+
+      &:hover {
+        color: #195a42;
+      }
+
+      &:focus-visible {
+        outline: 2px solid #278462;
+        outline-offset: 3px;
+      }
+    }
+
+    ul {
+      margin-top: 0.45em;
+      margin-bottom: 0.9em;
+      padding-left: 1.25em;
+    }
+
+    li {
+      margin-bottom: 0.45em;
+    }
+  }
+
+  .homepage-news time {
+    font-style: italic;
+  }
+
+  .homepage-papers li {
+    margin-bottom: 0.8em;
+  }
+
+  .publication-badge {
+    display: inline-block;
+    padding: 0.04em 0.4em;
+    border: 1px solid #d4e9df;
+    border-radius: 3px;
+    background-color: #eaf5ef;
+    color: #385d4b;
+    font-size: 0.72em;
+    line-height: 1.4;
+    vertical-align: 0.08em;
+    white-space: nowrap;
+  }
+
+  .publication-badge--preprint {
+    border-color: #e0e5e7;
+    background-color: #f0f3f4;
+    color: #4d6068;
+  }
+
+  .publication-note {
+    font-style: italic;
+  }
+
+  .paper-details,
+  .homepage-more {
+    font-size: 0.9em;
+  }
+
+  .paper-details {
+    white-space: nowrap;
+  }
+}

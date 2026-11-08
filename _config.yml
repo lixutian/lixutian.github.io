@@ -182,6 +182,7 @@ exclude:
   - README
   - tmp
   - tests
+  - scripts
   - vendor
 keep_files:
   - .git

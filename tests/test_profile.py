@@ -4,6 +4,8 @@ Run with: python -m unittest discover -s tests -v
 Uses only Python's standard library and does not fetch external links.
 """
 from html.parser import HTMLParser
+import hashlib
+import json
 from pathlib import Path
 import unittest
 from urllib.parse import unquote, urlsplit
@@ -21,7 +23,11 @@ class Page(HTMLParser):
         self.text = []
         self.comments = []
         self.links = []
+        self.navigation_links = []
+        self.navigation_anchors = []
+        self._in_site_nav = False
         self.images = []
+        self.ids = set()
         self.metadata = {}
         self.feed(path.read_text(encoding='utf-8'))
 
@@ -33,12 +39,23 @@ class Page(HTMLParser):
 
     def handle_starttag(self, tag, attributes):
         attrs = dict(attributes)
+        if tag == 'nav' and attrs.get('id') == 'site-nav':
+            self._in_site_nav = True
+        if attrs.get('id'):
+            self.ids.add(attrs['id'])
         if tag == 'a' and attrs.get('href'):
             self.links.append(attrs['href'])
+            if self._in_site_nav:
+                self.navigation_links.append(attrs['href'])
+                self.navigation_anchors.append(attrs)
         if tag == 'img' and attrs.get('src'):
             self.images.append(attrs['src'])
         if tag == 'meta':
             self.metadata[attrs.get('name', attrs.get('property'))] = attrs.get('content')
+
+    def handle_endtag(self, tag):
+        if tag == 'nav':
+            self._in_site_nav = False
 
     @property
     def content(self):
@@ -58,10 +75,28 @@ class ProfileTests(unittest.TestCase):
                 self.assertIn('Ph.D. student in CS, PKU', page.content)
                 self.assertIn('Peking University', page.content)
                 self.assertIn('https://github.com/a496263365', page.links)
-                self.assertTrue(any(urlsplit(x).path == '/publications/' for x in page.links))
+                self.assertTrue(any(urlsplit(x).path == '/' and urlsplit(x).fragment == 'news' for x in page.navigation_links))
+                self.assertIn('news', self.pages['index.html'].ids)
+                self.assertTrue(any(urlsplit(x).path == '/publications/' and not urlsplit(x).fragment for x in page.navigation_links))
+                self.assertFalse(any(urlsplit(x).fragment == 'papers' for x in page.navigation_links))
                 self.assertNotIn('Undergraduate student in CS, BIT', page.content)
                 self.assertNotIn('None now', page.content)
                 self.assertNotIn('Paper Title Number', page.content)
+
+    def test_cv_navigation_opens_the_approved_pdf_directly(self):
+        source = (ROOT / 'files/cv.pdf').read_bytes()
+        generated = (SITE / 'files/cv.pdf').read_bytes()
+        self.assertTrue(source.startswith(b'%PDF-'))
+        self.assertTrue(source.rstrip().endswith(b'%%EOF'))
+        self.assertEqual(generated, source)
+        for route, page in self.pages.items():
+            with self.subTest(route=route):
+                links = [link for link in page.navigation_anchors
+                         if urlsplit(link['href']).path == '/files/cv.pdf']
+                self.assertEqual(len(links), 1)
+                self.assertNotIn('download', links[0])
+                self.assertFalse(any(urlsplit(link).path == '/cv/'
+                                     for link in page.navigation_links))
 
     def test_education_and_awards(self):
         for route in ['index.html', 'cv/index.html']:
@@ -72,6 +107,15 @@ class ProfileTests(unittest.TestCase):
                     self.assertIn(phrase, text)
         for phrase in ['92.7/100', '1/162', 'first three undergraduate years']:
             self.assertIn(phrase, self.pages['cv/index.html'].content)
+
+    def test_homepage_advisors_follow_doctoral_introduction(self):
+        home = self.pages['index.html']
+        sentence = 'I am advised by Professor Bing Xie and Research Professor Yanzhen Zou'
+        self.assertIn(sentence, home.content)
+        self.assertLess(home.content.index('I am a Ph.D. student'), home.content.index(sentence))
+        self.assertLess(home.content.index(sentence), home.content.index('Before that, I received'))
+        self.assertIn('https://cs.pku.edu.cn/info/1231/2036.htm', home.links)
+        self.assertIn('https://cs.pku.edu.cn/info/1234/2070.htm', home.links)
 
     def test_homepage_grade_sentence_is_commented_out(self):
         sentence = (
@@ -88,14 +132,97 @@ class ProfileTests(unittest.TestCase):
         for route in ['index.html', 'cv/index.html', 'publications/index.html']:
             text = self.pages[route].content
             with self.subTest(route=route):
-                for phrase in ['FeatX:', 'FeatLens:', 'FeatOutline:', 'First author',
-                               'Second author', 'ASE 2026', 'FSE 2027 (under review)',
-                               'Under review — not yet accepted', 'November 7, 2026']:
+                for phrase in ['FeatX:', 'FeatLens:', 'FeatOutline:', '2026']:
                     self.assertIn(phrase, text)
                 self.assertNotIn('Published in FSE', text)
+        for phrase in ['arXiv 2026', 'TOSEM 2026', 'ASE 2026']:
+            self.assertIn(phrase, self.pages['index.html'].content)
         lens = self.pages['publication/featlens/index.html'].content
-        self.assertIn('Under review — not yet accepted', lens)
-        self.assertNotIn('Published in', lens)
+        self.assertIn('Preprint', lens)
+        self.assertIn('arXiv', self.pages['publications/index.html'].content)
+        self.assertIn('November 7, 2026', self.pages['cv/index.html'].content)
+
+    def test_submission_destination_and_author_position_labels_are_removed(self):
+        for route, page in self.pages.items():
+            with self.subTest(route=route):
+                for text in ['FSE 2027', 'First author', 'Second author',
+                             '第一作者', '第二作者', 'not yet accepted']:
+                    self.assertNotIn(text, page.content)
+        for route in ['index.html', 'cv/index.html', 'publications/index.html']:
+            html = (SITE / route).read_text(encoding='utf-8')
+            self.assertGreaterEqual(html.count('<strong>Xutian Li</strong>'), 3)
+
+    def test_compact_homepage_sections_and_paper_list(self):
+        page = self.pages['index.html']
+        for section in ['news', 'papers', 'education', 'honors', 'teaching', 'skills']:
+            self.assertIn(section, page.ids)
+        for heading in ['🔥 News', '📝 Papers', '📖 Education', '🎖 Honors and Awards', '💻 Teaching Experience', '🔧 Skills']:
+            self.assertIn(heading, page.content)
+        html = (SITE / 'index.html').read_text(encoding='utf-8')
+        self.assertIn('class="page page--homepage"', html)
+        self.assertIn('class="page__title sr-only"', html)
+        papers = html.split('<ul class="homepage-papers">', 1)[1].split('</ul>', 1)[0]
+        self.assertEqual(papers.count('<li>'), 3)
+        self.assertEqual(papers.count('<strong>Xutian Li</strong>'), 3)
+        for slug in ['featx', 'featlens', 'featoutline']:
+            self.assertTrue(any(urlsplit(link).path == f'/publication/{slug}/' for link in page.links))
+        self.assertTrue(any(urlsplit(link).path == '/publications/' for link in page.links))
+        self.assertNotIn('About Me', page.content)
+        self.assertNotIn('Research Interests', page.content)
+
+    def test_papers_index_expands_overviews_and_links_to_detail_pages(self):
+        path = SITE / 'publications/index.html'
+        html = path.read_text(encoding='utf-8')
+        page = self.pages['publications/index.html']
+        self.assertIn('class="archive archive--papers"', html)
+        self.assertIn('<h1 class="page__title">Papers</h1>', html)
+        self.assertEqual(html.count('<article class="papers-entry"'), 3)
+        self.assertEqual(html.count('class="papers-entry__overview"'), 3)
+        self.assertEqual(html.count('class="papers-entry__links archive__item-links"'), 3)
+        for label in ['Journal Articles', 'Conference Papers', 'Preprints / Under Review']:
+            self.assertNotIn(label, page.content)
+        for phrase in ['JavaParser-based static analysis', 'personalized PageRank',
+                       '57.4% method-level Link@3 F1', '55.03%', '42.6%']:
+            self.assertIn(phrase, page.content)
+        for slug in ['featx', 'featlens', 'featoutline']:
+            entry = html.split(f'<article class="papers-entry" id="{slug}"', 1)[1].split('</article>', 1)[0]
+            title = entry.split('</h2>', 1)[0]
+            self.assertIn(f'href="/publication/{slug}/"', title)
+            self.assertIn('<strong>Xutian Li</strong>', entry)
+            overview = entry.split('class="papers-entry__overview" itemprop="description">', 1)[1].split('</p>', 1)[0]
+            self.assertNotIn('<p>', overview)
+            self.assertNotIn('papers-entry__role', entry)
+            self.assertNotIn('papers-entry__status', entry)
+            self.assertIn('<i>', entry.split('class="papers-entry__venue">', 1)[1].split('</p>', 1)[0])
+            self.assertIn('target="_blank" rel="noopener"', entry)
+        self.assertLess(html.index('id="featoutline"'), html.index('id="featx"'))
+        self.assertLess(html.index('id="featx"'), html.index('id="featlens"'))
+
+    def test_teaching_experience_is_shared_by_homepage_and_cv(self):
+        for route in ['index.html', 'cv/index.html']:
+            with self.subTest(route=route):
+                html = (SITE / route).read_text(encoding='utf-8')
+                teaching = html.split('<ul class="teaching-experience">', 1)[1].split('</ul>', 1)[0]
+                self.assertEqual(teaching.count('<li>'), 1)
+                for phrase in ['2026 Spring', 'Teaching Assistant',
+                               'Data Structures and Algorithms B', '数据结构与算法 B']:
+                    self.assertIn(phrase, teaching)
+                for unsupported in ['Graduate-level', 'in English', 'grading', 'office hours']:
+                    self.assertNotIn(unsupported, teaching)
+        self.assertIn('teaching', self.pages['index.html'].ids)
+
+    def test_homepage_news_only_announces_published_papers(self):
+        html = (SITE / 'index.html').read_text(encoding='utf-8')
+        news = html.split('<ul class="homepage-news">', 1)[1].split('</ul>', 1)[0]
+        self.assertEqual(news.count('<li>'), 3)
+        self.assertIn('2026.11', news)
+        self.assertIn('2026.10', news)
+        self.assertIn('2025.09', news)
+        self.assertIn('FeatOutline', news)
+        self.assertIn('FeatX', news)
+        self.assertNotIn('FeatLens', news)
+        self.assertNotIn('FSE 2027', news)
+        self.assertLess(news.index('2026.11'), news.index('2026.10'))
 
     def test_research_metrics_and_scope(self):
         text = self.pages['cv/index.html'].content
@@ -117,8 +244,36 @@ class ProfileTests(unittest.TestCase):
                 with self.subTest(route=route, url=url):
                     self.assertIn(url, self.pages[route].links)
 
-    def test_no_new_private_resume_details(self):
-        # The existing public email is intentional; the private resume is not uploaded.
+    def test_self_hosted_rubik_and_chinese_fonts_are_packaged(self):
+        manifest = json.loads((ROOT / 'assets/fonts/manifest.json').read_text())
+        self.assertEqual(len(manifest['fonts']), 3)
+        css = (SITE / 'assets/css/main.css').read_text(encoding='utf-8')
+        self.assertIn('Rubik', css)
+        self.assertIn('Trebuchet MS', css)
+        for item in manifest['fonts']:
+            source = ROOT / 'assets/fonts' / item['file']
+            generated = SITE / 'assets/fonts' / item['file']
+            data = source.read_bytes()
+            self.assertTrue(data.startswith(b'wOF2'))
+            self.assertEqual(hashlib.sha256(data).hexdigest(), item['sha256'])
+            self.assertEqual(generated.read_bytes(), data)
+            self.assertTrue((SITE / 'assets/fonts' / item['license']).is_file())
+            self.assertIn(item['file'], css)
+        self.assertLess(sum(item['bytes'] for item in manifest['fonts']), 500000)
+
+    def test_chinese_font_subset_covers_profile_text(self):
+        manifest = json.loads((ROOT / 'assets/fonts/manifest.json').read_text())
+        covered = set(manifest['cjk_codepoints'])
+        ranges = [(0x2E80, 0x303F), (0x3400, 0x4DBF), (0x4E00, 0x9FFF),
+                  (0xF900, 0xFAFF), (0xFF00, 0xFFEF), (0x20000, 0x3134F)]
+        for route, page in self.pages.items():
+            required = {ord(c) for c in page.content
+                        if any(lo <= ord(c) <= hi for lo, hi in ranges)}
+            with self.subTest(route=route):
+                self.assertFalse(required - covered, 'Refresh the subset with scripts/build_webfonts.py')
+
+    def test_private_resume_details_are_not_added_to_html(self):
+        # The owner approved the original PDF; HTML profiles still omit these details.
         for route, page in self.pages.items():
             with self.subTest(route=route):
                 self.assertNotIn('出生年月', page.content)
@@ -126,7 +281,7 @@ class ProfileTests(unittest.TestCase):
                 self.assertNotRegex(page.content, r'(?<!\d)1[3-9]\d{9}(?!\d)')
                 self.assertFalse(any('2025-2.jpg' in x or 'main.pdf' in x
                                      for x in page.links + page.images))
-        for excluded in ['local', 'vendor', 'tests', '.bundle']:
+        for excluded in ['local', 'vendor', 'tests', 'scripts', '.bundle']:
             self.assertFalse((SITE / excluded).exists(), excluded)
 
     def test_local_links_and_images_resolve(self):

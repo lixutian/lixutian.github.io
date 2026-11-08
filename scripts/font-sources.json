@@ -1,0 +1,53 @@
+[
+  {
+    "source_file": "fonts/rubik-normal.ttf",
+    "source_url": "https://raw.githubusercontent.com/google/fonts/main/ofl/rubik/Rubik%5Bwght%5D.ttf",
+    "source_sha256": "1b3a7437ba2af80e465e773ed60c5036d1ba6ace492d89046dbcf18fb31e4e88",
+    "output_file": "rubik-regular.woff2",
+    "family": "Rubik",
+    "style": "normal",
+    "weights": [
+      300,
+      900
+    ],
+    "subset": false,
+    "license_source": "licenses/rubik.txt",
+    "license_url": "https://raw.githubusercontent.com/google/fonts/main/ofl/rubik/OFL.txt",
+    "license_sha256": "472cbe7c25441df63e9c7864b43eb3c0f4b3df950c66a76224e6cfe1eae843fb",
+    "license_output": "Rubik-OFL.txt"
+  },
+  {
+    "source_file": "fonts/rubik-italic.ttf",
+    "source_url": "https://raw.githubusercontent.com/google/fonts/main/ofl/rubik/Rubik-Italic%5Bwght%5D.ttf",
+    "source_sha256": "08c6c4018a5ada8b517407b46897e46cf6ebb106853fbd3e89addb51d3b59c62",
+    "output_file": "rubik-italic.woff2",
+    "family": "Rubik",
+    "style": "italic",
+    "weights": [
+      300,
+      900
+    ],
+    "subset": false,
+    "license_source": "licenses/rubik.txt",
+    "license_url": "https://raw.githubusercontent.com/google/fonts/main/ofl/rubik/OFL.txt",
+    "license_sha256": "472cbe7c25441df63e9c7864b43eb3c0f4b3df950c66a76224e6cfe1eae843fb",
+    "license_output": "Rubik-OFL.txt"
+  },
+  {
+    "source_file": "fonts/noto-sans-sc.ttf",
+    "source_url": "https://raw.githubusercontent.com/google/fonts/main/ofl/notosanssc/NotoSansSC%5Bwght%5D.ttf",
+    "source_sha256": "a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da",
+    "output_file": "noto-sans-sc-site.woff2",
+    "family": "Homepage Noto Sans SC",
+    "style": "normal",
+    "weights": [
+      100,
+      900
+    ],
+    "subset": true,
+    "license_source": "licenses/noto-sans-sc.txt",
+    "license_url": "https://raw.githubusercontent.com/google/fonts/main/ofl/notosanssc/OFL.txt",
+    "license_sha256": "1c05c68c34f9708415aada51f17e1b0092d2cea709bf4a94cd38114f9e73d7d9",
+    "license_output": "Noto-Sans-SC-OFL.txt"
+  }
+]

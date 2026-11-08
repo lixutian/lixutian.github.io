@@ -1,0 +1,12 @@
+{% assign paper = include.paper %}
+<div class="list__item">
+  <article class="papers-entry" id="{{ paper.short_title | slugify }}" aria-labelledby="paper-title-{{ paper.short_title | slugify }}">
+    <h2 class="archive__item-title" id="paper-title-{{ paper.short_title | slugify }}">
+      <a href="{{ paper.url | relative_url }}" rel="permalink">{{ paper.title | escape }}</a>
+    </h2>
+    <p class="papers-entry__venue"><i>{{ paper.venue_name | default: paper.venue | escape }}</i>, {{ paper.date | date: '%Y' }}</p>
+    <p class="papers-entry__authors archive__item-authors">{{ paper.authors | markdownify | remove: '<p>' | remove: '</p>' | strip }}</p>
+    <p class="papers-entry__overview" itemprop="description">{{ paper.overview | default: paper.excerpt | markdownify | remove: '<p>' | replace: '</p>', ' ' | strip }}</p>
+    <p class="papers-entry__links archive__item-links"><a href="{{ paper.paperurl }}" target="_blank" rel="noopener" aria-label="{{ paper.paper_label | escape }}">{% if paper.category == 'preprints' %}[arXiv]{% else %}[DOI]{% endif %}</a></p>
+  </article>
+</div>

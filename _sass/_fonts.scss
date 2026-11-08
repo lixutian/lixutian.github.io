@@ -1,0 +1,25 @@
+/* Self-hosted fonts selected from the preview. Font files retain their OFL licenses. */
+@font-face {
+  font-family: "Rubik";
+  src: url("../fonts/rubik-regular.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 300 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Rubik";
+  src: url("../fonts/rubik-italic.woff2") format("woff2");
+  font-style: italic;
+  font-weight: 300 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Homepage Noto Sans SC";
+  src: url("../fonts/noto-sans-sc-site.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  unicode-range: U+2E80-303F, U+3400-4DBF, U+4E00-9FFF, U+F900-FAFF, U+FF00-FFEF, U+20000-3134F;
+}

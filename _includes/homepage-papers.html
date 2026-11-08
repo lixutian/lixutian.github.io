@@ -1,0 +1,12 @@
+{% assign homepage_papers = site.publications | sort: 'resume_order' %}
+<ul class="homepage-papers">
+  {% for paper in homepage_papers %}
+  <li>
+    <span class="publication-badge{% if paper.category == 'preprints' %} publication-badge--preprint{% endif %}">{{ paper.venue_label | escape }}</span>
+    <a href="{{ paper.paperurl }}">{{ paper.title | escape }}</a>,
+    {{ paper.authors | markdownify | remove: '<p>' | remove: '</p>' | strip }}.
+    {% if paper.homepage_note %}<span class="publication-note">({{ paper.homepage_note | escape }})</span>{% endif %}
+    <a class="paper-details" href="{{ paper.url | relative_url }}" aria-label="Details for {{ paper.short_title | escape }}">[Details]</a>
+  </li>
+  {% endfor %}
+</ul>

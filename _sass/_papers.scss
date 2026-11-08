@@ -1,0 +1,55 @@
+/* The reference uses an in-flow 4.5em + 1px header and a 2em main gap.
+   Compensate for this site's fixed masthead only on the Papers page. */
+#main.papers-layout {
+  margin-top: calc(6.5em + 1px - #{$masthead-height});
+}
+
+/* Match the reference Papers page's rhythm. Only authors use its font stack. */
+.archive--papers {
+  .list__item {
+    padding-right: 0;
+  }
+
+  a {
+    color: #1e7a56;
+    text-decoration: underline;
+    text-underline-offset: auto;
+
+    &:hover {
+      color: #165e42;
+    }
+
+    &:focus-visible {
+      outline: 2px solid #1e7a56;
+      outline-offset: 3px;
+    }
+  }
+
+  .papers-entry {
+    margin: 0;
+  }
+
+  .papers-entry .archive__item-title {
+    margin-top: 2em;
+    margin-bottom: 0.25em;
+    font-family: $global-font-family;
+    font-size: 1.25em;
+    line-height: 1.2;
+  }
+
+  .papers-entry > p {
+    margin-top: 1em;
+    margin-bottom: 1.3em;
+    line-height: 1.5;
+  }
+
+  .papers-entry__authors {
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    font-size: 0.85em;
+    color: #666;
+  }
+
+  .papers-entry > .papers-entry__links {
+    margin-bottom: 0.5em;
+  }
+}

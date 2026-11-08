@@ -12,10 +12,10 @@ layout: default
   {% endunless %}
 {% endif %}
 
-<div id="main" role="main">
+<div id="main" role="main"{% if page.papers_archive %} class="papers-layout"{% endif %}>
   {% include sidebar.html %}
 
-  <div class="archive">
+  <div class="archive{% if page.papers_archive %} archive--papers{% endif %}">
     {% unless page.header.overlay_color or page.header.overlay_image %}
       <h1 class="page__title">{{ page.title }}</h1>
     {% endunless %}

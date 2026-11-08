@@ -1,0 +1,72 @@
+{
+  "cjk_codepoints": [
+    19977,
+    19982,
+    19994,
+    20140,
+    20248,
+    21271,
+    22909,
+    23398,
+    24066,
+    25454,
+    25968,
+    26093,
+    26446,
+    26500,
+    27605,
+    27861,
+    29983,
+    30000,
+    31168,
+    31639,
+    32467
+  ],
+  "fonts": [
+    {
+      "file": "rubik-regular.woff2",
+      "family": "Rubik",
+      "style": "normal",
+      "weights": [
+        300,
+        900
+      ],
+      "subset": false,
+      "bytes": 112420,
+      "sha256": "8358f0a47ba7922be1c6c6ee17d6ed2acbf914ab0726126ef6764033c26cadf2",
+      "source_url": "https://raw.githubusercontent.com/google/fonts/main/ofl/rubik/Rubik%5Bwght%5D.ttf",
+      "source_sha256": "1b3a7437ba2af80e465e773ed60c5036d1ba6ace492d89046dbcf18fb31e4e88",
+      "license": "Rubik-OFL.txt"
+    },
+    {
+      "file": "rubik-italic.woff2",
+      "family": "Rubik",
+      "style": "italic",
+      "weights": [
+        300,
+        900
+      ],
+      "subset": false,
+      "bytes": 116404,
+      "sha256": "b17501a4139905c8528c4323adee4a01bf619df41231ec7419b7b96e82697ef7",
+      "source_url": "https://raw.githubusercontent.com/google/fonts/main/ofl/rubik/Rubik-Italic%5Bwght%5D.ttf",
+      "source_sha256": "08c6c4018a5ada8b517407b46897e46cf6ebb106853fbd3e89addb51d3b59c62",
+      "license": "Rubik-OFL.txt"
+    },
+    {
+      "file": "noto-sans-sc-site.woff2",
+      "family": "Homepage Noto Sans SC",
+      "style": "normal",
+      "weights": [
+        100,
+        900
+      ],
+      "subset": true,
+      "bytes": 7608,
+      "sha256": "0d501f836ade8fe874f1979abf54d616929efc6b855b1fb555eaa5b088bb21c4",
+      "source_url": "https://raw.githubusercontent.com/google/fonts/main/ofl/notosanssc/NotoSansSC%5Bwght%5D.ttf",
+      "source_sha256": "a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da",
+      "license": "Noto-Sans-SC-OFL.txt"
+    }
+  ]
+}

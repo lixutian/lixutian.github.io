@@ -11,6 +11,7 @@
 */
 
 @import "vendor/breakpoint/breakpoint"; // media query mixins
+@import "fonts";
 @import "variables";
 @import "mixins";
 @import "vendor/susy/susy";
@@ -39,3 +40,6 @@
 @import "vendor/font-awesome/brands";
 @import "vendor/magnific-popup/magnific-popup";
 @import "print";
+
+@import "homepage";
+@import "papers";

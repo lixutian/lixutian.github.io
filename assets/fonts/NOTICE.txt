@@ -1,0 +1,18 @@
+Website fonts
+
+Rubik: Copyright 2015 The Rubik Project Authors.
+Rubik-OFL.txt contains the original license notice. The regular and italic
+variable fonts have been converted from their original TrueType files to WOFF2
+without changing their glyph outlines, character coverage, or weight range.
+
+Noto Sans SC: Copyright 2014-2021 Adobe, with Reserved Font Name 'Source'.
+Noto-Sans-SC-OFL.txt contains the original license notice. The website font is a
+WOFF2 subset containing the Chinese characters and punctuation currently used
+in the generated HTML. The original glyph outlines, weights, and font name
+records are retained. This subset does not use the Reserved Font Name 'Source'
+as its font-family name.
+
+Both font families are distributed under the SIL Open Font License 1.1.
+manifest.json records the packaged file hashes, sources, and Chinese coverage.
+To refresh Chinese coverage, build the site, run scripts/build_webfonts.py,
+and rebuild. Font processing is local; site text is not sent to a font service.

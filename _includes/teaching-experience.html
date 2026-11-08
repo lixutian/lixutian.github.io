@@ -1,0 +1,5 @@
+<ul class="teaching-experience">
+  {% for experience in site.data.teaching %}
+  <li><strong>{{ experience.term | escape }}</strong>, {{ experience.role | escape }}, {{ experience.course | escape }} ({{ experience.course_zh | escape }}).</li>
+  {% endfor %}
+</ul>

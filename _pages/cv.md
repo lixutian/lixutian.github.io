@@ -51,6 +51,10 @@ Code intelligence, repository-level code evolution, code retrieval, static progr
 - Reproduced a method for identifying repetition-related neurons. Used PyTorch forward hooks to collect MLP activations, selected candidate neurons by differences in mean activation before and after repetition, and zeroed their activations during inference.
 - In the course report's **GPT-2 / IWSLT** experiment, neuron suppression alone reduced **Rep-3 from 70.66% to 24.54%**, while **perplexity increased from 1.589 to 3.732**. These results show a repetition–perplexity trade-off, not a lossless improvement.
 
+## Teaching Experience
+
+{% include teaching-experience.html %}
+
 ## Technical Skills
 
 - **Programming:** Java, Python, JavaScript, C++.
