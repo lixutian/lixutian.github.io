@@ -7,6 +7,6 @@
     <p class="papers-entry__venue"><i>{{ paper.venue_name | default: paper.venue | escape }}</i>, {{ paper.date | date: '%Y' }}</p>
     <p class="papers-entry__authors archive__item-authors">{{ paper.authors | markdownify | remove: '<p>' | remove: '</p>' | strip }}</p>
     <p class="papers-entry__overview" itemprop="description">{{ paper.overview | default: paper.excerpt | markdownify | remove: '<p>' | replace: '</p>', ' ' | strip }}</p>
-    <p class="papers-entry__links archive__item-links"><a href="{{ paper.paperurl }}" target="_blank" rel="noopener" aria-label="{{ paper.paper_label | escape }}">{% if paper.category == 'preprints' %}[arXiv]{% else %}[DOI]{% endif %}</a></p>
+    <p class="papers-entry__links archive__item-links"><a href="{{ paper.paperurl }}" target="_blank" rel="noopener" aria-label="{{ paper.paper_label | escape }}">{% if paper.category == 'preprints' %}[arXiv]{% else %}[DOI]{% endif %}</a> {% include paper-resources.html paper=paper %}</p>
   </article>
 </div>

@@ -9,6 +9,13 @@
     var socialList = details.closest('.author__urls');
     var saved = null;
     var frame = null;
+    var hoverDevices = window.matchMedia('(hover: hover) and (pointer: fine)');
+    var hoverCloseTimer = null;
+
+    function cancelHoverClose() {
+      window.clearTimeout(hoverCloseTimer);
+      hoverCloseTimer = null;
+    }
 
     function releaseContainer() {
       if (!saved) return;
@@ -65,12 +72,29 @@
     }
 
     function close(restoreFocus) {
+      cancelHoverClose();
       if (!details.open) return;
       details.open = false;
       toggle.setAttribute('aria-expanded', 'false');
       releaseContainer();
       if (restoreFocus) toggle.focus({ preventScroll: true });
     }
+
+    // Use actual pointer capabilities, not viewport size: touch keeps native tap behavior.
+    details.addEventListener('pointerenter', function (event) {
+      if (!hoverDevices.matches || event.pointerType !== 'mouse') return;
+      cancelHoverClose();
+      details.open = true;
+      toggle.setAttribute('aria-expanded', 'true');
+      schedulePosition();
+    });
+    details.addEventListener('pointerleave', function (event) {
+      if (!hoverDevices.matches || event.pointerType !== 'mouse') return;
+      cancelHoverClose();
+      // A short grace period avoids flicker while moving from the nickname to the QR.
+      hoverCloseTimer = window.setTimeout(function () { close(false); }, 180);
+    });
+    hoverDevices.addEventListener('change', cancelHoverClose);
 
     details.addEventListener('toggle', function () {
       toggle.setAttribute('aria-expanded', String(details.open));

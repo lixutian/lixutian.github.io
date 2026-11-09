@@ -1,0 +1,8 @@
+{% for resource in include.paper.resources %}
+  {% if resource.url contains '://' %}
+    {% assign resource_url = resource.url %}
+  {% else %}
+    {% assign resource_url = resource.url | relative_url %}
+  {% endif %}
+  <a href="{{ resource_url | escape }}" target="_blank" rel="noopener" aria-label="{{ include.paper.short_title | escape }} {{ resource.label | escape }}">[{{ resource.label | escape }}]</a>
+{% endfor %}

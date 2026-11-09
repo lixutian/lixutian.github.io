@@ -24,6 +24,7 @@ author:
   avatar           : "profile.jpg"
   name             : "李旭田<br />Xutian Li"
   bio              : "Ph.D. student in CS, PKU"
+  bio_logo         : "/images/logos/pku.png"
   location         : "Beijing, China"
   employer         : "Peking University"
   uri              : # URL

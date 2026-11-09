@@ -63,6 +63,49 @@ class Page(HTMLParser):
 
 
 class ProfileTests(unittest.TestCase):
+    def test_featx_presentation_resources(self):
+        video = 'https://youtu.be/OZqKZ4Ii-yM?si=aRMrJyVAStnFKE2N'
+        for route in ['index.html', 'publications/index.html', 'publication/featx/index.html']:
+            page = self.pages[route]
+            for label, link in [('Slides', '/files/featx/slides.pdf'),
+                                ('Poster', '/files/featx/poster.pdf'), ('Video', video)]:
+                self.assertIn(link, page.links)
+                self.assertIn('[' + label + ']', page.content)
+        for name in ['slides.pdf', 'poster.pdf']:
+            source = (ROOT / 'files/featx' / name).read_bytes()
+            self.assertTrue(source.startswith(b'%PDF-'))
+            self.assertEqual(source, (SITE / 'files/featx' / name).read_bytes())
+        for slug in ['featlens', 'featoutline']:
+            self.assertNotIn(video, self.pages[f'publication/{slug}/index.html'].links)
+
+
+    def test_sidebar_displays_email_address(self):
+        for route in ROUTES:
+            html = (SITE / route).read_text()
+            self.assertIn('href="mailto:a496263365a@163.com"', html)
+            self.assertIn('fa-envelope icon-pad-right" aria-hidden="true"></i>a496263365a@163.com</a>', html)
+
+
+    def test_about_paragraph_has_both_university_seals(self):
+        html = (SITE / 'index.html').read_text()
+        self.assertEqual(html.count('class="university-seal"'), 2)
+        for asset in ('pku.png', 'bit.jpg'):
+            self.assertIn('/images/logos/' + asset, html)
+            self.assertEqual((ROOT / 'images/logos' / asset).read_bytes(),
+                             (SITE / 'images/logos' / asset).read_bytes())
+        self.assertNotIn('href="/images/logos/', html)
+
+
+    def test_sidebar_university_seal(self):
+        source = ROOT / 'images/logos/pku.png'
+        self.assertTrue(source.read_bytes().startswith(b'\x89PNG\r\n\x1a\n'))
+        self.assertEqual(source.read_bytes(), (SITE / 'images/logos/pku.png').read_bytes())
+        for route in ROUTES:
+            html = (SITE / route).read_text()
+            self.assertIn('PKU<img class="author__bio-logo"', html)
+            self.assertIn('/images/logos/pku.png', html)
+
+
     @classmethod
     def setUpClass(cls):
         if not (SITE / 'index.html').exists():
@@ -107,6 +150,10 @@ class ProfileTests(unittest.TestCase):
         interaction = (SITE / 'assets/js/wechat-popover.js').read_text(encoding='utf-8')
         self.assertNotIn('contextmenu', interaction)
         self.assertNotIn('touchstart', interaction)
+        self.assertIn('(hover: hover) and (pointer: fine)', interaction)
+        self.assertIn("event.pointerType !== 'mouse'", interaction)
+        self.assertIn("details.addEventListener('pointerenter'", interaction)
+        self.assertIn("details.addEventListener('pointerleave'", interaction)
 
     def test_cv_navigation_opens_the_approved_pdf_directly(self):
         source = (ROOT / 'files/cv.pdf').read_bytes()

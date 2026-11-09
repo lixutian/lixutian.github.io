@@ -6,6 +6,7 @@
     <a href="{{ paper.paperurl }}">{{ paper.title | escape }}</a>,
     {{ paper.authors | markdownify | remove: '<p>' | remove: '</p>' | strip }}.
     {% if paper.homepage_note %}<span class="publication-note">({{ paper.homepage_note | escape }})</span>{% endif %}
+    {% include paper-resources.html paper=paper %}
     <a class="paper-details" href="{{ paper.url | relative_url }}" aria-label="Details for {{ paper.short_title | escape }}">[Details]</a>
   </li>
   {% endfor %}

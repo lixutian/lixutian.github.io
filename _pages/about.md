@@ -11,7 +11,7 @@ redirect_from:
 
 Hi, I'm **Xutian Li** (李旭田).
 
-I am a Ph.D. student in Computer Science and Technology at the [School of Computer Science](https://cs.pku.edu.cn/), [Peking University](https://www.pku.edu.cn/), focusing on software engineering. I am advised by [Professor Bing Xie](https://cs.pku.edu.cn/info/1231/2036.htm) and [Research Professor Yanzhen Zou](https://cs.pku.edu.cn/info/1234/2070.htm). Before that, I received my bachelor's degree in Computer Science and Technology from [Beijing Institute of Technology](https://english.bit.edu.cn/) in June 2025.
+I am a Ph.D. student in Computer Science and Technology at the [School of Computer Science](https://cs.pku.edu.cn/), [Peking University](https://www.pku.edu.cn/)&#8288;<img class="university-seal" src="{{ '/images/logos/pku.png' | relative_url }}" alt="" aria-hidden="true" width="20" height="20">, focusing on software engineering. I am advised by [Professor Bing Xie](https://cs.pku.edu.cn/info/1231/2036.htm) and [Research Professor Yanzhen Zou](https://cs.pku.edu.cn/info/1234/2070.htm). Before that, I received my bachelor's degree in Computer Science and Technology from [Beijing Institute of Technology](https://english.bit.edu.cn/)&#8288;<img class="university-seal" src="{{ '/images/logos/bit.jpg' | relative_url }}" alt="" aria-hidden="true" width="20" height="20"> in June 2025.
 
 <!-- Over my first three undergraduate years, my average credit-weighted score was **92.7/100**, and I ranked **1st out of 162** students in my major. -->
 

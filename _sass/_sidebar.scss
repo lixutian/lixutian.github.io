@@ -258,3 +258,16 @@
     }
   }
 }
+
+/* Keep the university seal inline without inheriting portrait image styling. */
+.sidebar .author__bio img.author__bio-logo {
+  display: inline-block;
+  width: 1.15em;
+  height: 1.15em;
+  margin: 0 0 0 0.25em;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  vertical-align: -0.18em;
+  object-fit: contain;
+}
