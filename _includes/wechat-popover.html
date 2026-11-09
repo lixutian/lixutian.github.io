@@ -1,0 +1,11 @@
+<li class="author-wechat">
+  <details class="wechat-contact" data-wechat-popover>
+    <summary class="wechat-toggle" aria-controls="wechat-qr-popover" aria-expanded="false">
+      <i class="fab fa-fw fa-weixin icon-pad-right" aria-hidden="true"></i><span>WeChat: {{ author.wechat_name | escape }}</span>
+    </summary>
+    <div class="wechat-popover" id="wechat-qr-popover" role="region" aria-label="{{ author.wechat_name | escape }}的微信二维码">
+      <button class="wechat-close" type="button" aria-label="关闭微信二维码">&times;</button>
+      <img class="wechat-qr" src="{{ author.wechat_qr | relative_url }}" alt="{{ author.wechat_name | escape }}的微信二维码" width="958" height="1415" loading="eager" decoding="async">
+    </div>
+  </details>
+</li>

@@ -83,6 +83,31 @@ class ProfileTests(unittest.TestCase):
                 self.assertNotIn('None now', page.content)
                 self.assertNotIn('Paper Title Number', page.content)
 
+    def test_wechat_sidebar_uses_original_qr_with_click_disclosure(self):
+        source = (ROOT / 'images/wechat-qr.jpg').read_bytes()
+        self.assertEqual(hashlib.sha256(source).hexdigest(),
+                         '974729d5b0f57f91e3dab4f79171e3b6dee3f7c2648a55a4b57f7c6de7d4d42c')
+        self.assertEqual((SITE / 'images/wechat-qr.jpg').read_bytes(), source)
+        for route, page in self.pages.items():
+            with self.subTest(route=route):
+                html = (SITE / route).read_text(encoding='utf-8')
+                self.assertIn('WeChat: 浪迹天涯的小柴', page.content)
+                self.assertIn('<details class="wechat-contact" data-wechat-popover>', html)
+                self.assertIn('aria-controls="wechat-qr-popover" aria-expanded="false"', html)
+                self.assertIn('aria-label="关闭微信二维码"', html)
+                self.assertNotIn('wechat-qr-link', html)
+                self.assertIn('loading="eager"', html)
+                self.assertNotIn('点击图片查看原图', html)
+                self.assertIn('assets/js/wechat-popover.js', html)
+                self.assertTrue(any(urlsplit(url).path == '/images/wechat-qr.jpg' for url in page.images))
+                self.assertFalse(any(urlsplit(url).path == '/images/wechat-qr.jpg' for url in page.links))
+        script = (SITE / 'assets/js/main.min.js').read_text(encoding='utf-8')
+        self.assertIn('.author__urls-wrapper > button', script)
+        self.assertNotIn('.author__urls-wrapper button', script)
+        interaction = (SITE / 'assets/js/wechat-popover.js').read_text(encoding='utf-8')
+        self.assertNotIn('contextmenu', interaction)
+        self.assertNotIn('touchstart', interaction)
+
     def test_cv_navigation_opens_the_approved_pdf_directly(self):
         source = (ROOT / 'files/cv.pdf').read_bytes()
         generated = (SITE / 'files/cv.pdf').read_bytes()
